@@ -1,0 +1,9 @@
+{
+  "name": "lvyuanjin-personal-site",
+  "version": "2.1.0",
+  "private": true,
+  "description": "Personal website with a local account backend and changelog.",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

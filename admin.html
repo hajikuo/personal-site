@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理后台 · 吕芫瑨</title>
+  <meta name="description" content="吕芫瑨个人网站的账户与更新日志管理后台。">
+  <meta name="theme-color" content="#f3efe5" id="themeColor">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23171815'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='%23f3efe5' font-family='sans-serif'%3E吕%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="admin.css">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("theme");
+        var dark = saved === "dark" || (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+      } catch (error) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
+</head>
+<body class="admin-body">
+  <a class="skip-link" href="#adminMain">跳到管理内容</a>
+
+  <header class="admin-top">
+    <div class="admin-shell admin-top__inner">
+      <a class="brand" href="index.html" aria-label="吕芫瑨，返回首页">
+        <span class="brand__mark" aria-hidden="true">吕</span>
+        <span class="brand__text"><strong>吕芫瑨</strong><small>PERSONAL SITE</small></span>
+      </a>
+      <div class="admin-top__label">
+        <span class="admin-badge">ADMIN</span>
+        <span>账户与内容管理</span>
+      </div>
+      <div class="admin-top__actions">
+        <a class="admin-back" href="index.html">返回网站</a>
+        <button class="icon-btn theme-toggle" id="adminTheme" type="button" aria-label="切换到深色模式" aria-pressed="false">
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20.5 14.4A8.5 8.5 0 1 1 9.6 3.5a7 7 0 0 0 10.9 10.9Z"></path>
+          </svg>
+        </button>
+        <button class="admin-logout" id="adminLogout" type="button" hidden>退出</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-shell" id="adminMain">
+    <section class="admin-state" id="adminLoading">
+      <span class="admin-spinner" aria-hidden="true"></span>
+      <h1>正在连接后台</h1>
+      <p>检查账户会话与管理服务…</p>
+    </section>
+
+    <section class="admin-state" id="adminOffline" hidden>
+      <span class="admin-state__icon" aria-hidden="true">!</span>
+      <h1>后台服务未连接</h1>
+      <p>账户管理需要 Node 服务。请用 <code>node server.js</code> 启动站点，再访问这个页面。</p>
+      <a class="btn btn--primary" href="index.html">返回网站</a>
+    </section>
+
+    <section class="admin-state" id="adminLogin" hidden>
+      <span class="admin-state__icon" aria-hidden="true">→</span>
+      <h1>请先登录管理员账户</h1>
+      <p>使用用户名和密码登录后，才能查看和管理站点账户。</p>
+      <div class="admin-state__actions">
+        <a class="btn btn--primary" href="login.html?next=admin">去登录</a>
+        <a class="btn btn--ghost" id="adminSetupLink" href="login.html#register">创建首个管理员</a>
+      </div>
+    </section>
+
+    <section class="admin-state" id="adminDenied" hidden>
+      <span class="admin-state__icon" aria-hidden="true">×</span>
+      <h1>没有管理员权限</h1>
+      <p>当前账户是普通用户。如需管理权限，请使用管理员账户登录。</p>
+      <div class="admin-state__actions">
+        <a class="btn btn--primary" href="login.html?switch=1&next=admin">切换账户</a>
+        <a class="btn btn--ghost" href="index.html">返回网站</a>
+      </div>
+    </section>
+
+    <div id="adminApp" hidden>
+      <header class="admin-head">
+        <div>
+          <p class="section-kicker">ADMIN / DASHBOARD</p>
+          <h1>账户管理<span class="title-dot">.</span></h1>
+          <p>查看账户、调整角色与状态，并维护网站更新日志。</p>
+        </div>
+        <div class="admin-head__user">
+          <span class="auth-avatar" id="adminAvatar" aria-hidden="true">吕</span>
+          <div><strong id="adminName">管理员</strong><span>当前登录账户</span></div>
+        </div>
+      </header>
+
+      <section class="admin-stats" aria-label="账户概览">
+        <article><span>账户总数</span><strong id="adminTotal">0</strong><small>ALL ACCOUNTS</small></article>
+        <article><span>启用中</span><strong id="adminActive">0</strong><small>ACTIVE</small></article>
+        <article><span>管理员</span><strong id="adminAdmins">0</strong><small>ADMINS</small></article>
+        <article><span>今日新增</span><strong id="adminToday">0</strong><small>NEW TODAY</small></article>
+      </section>
+
+      <section class="admin-panel">
+        <div class="admin-panel__head">
+          <div>
+            <p class="panel__kicker">ACCOUNTS</p>
+            <h2>全部账户</h2>
+          </div>
+          <div class="admin-toolbar">
+            <label class="admin-search">
+              <span class="sr-only">搜索账户</span>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="5.5"></circle><path d="m13 13 4 4"></path></svg>
+              <input id="userSearch" type="search" placeholder="搜索用户名或邮箱" autocomplete="off">
+            </label>
+            <select id="statusFilter" aria-label="按状态筛选">
+              <option value="all">全部状态</option>
+              <option value="active">启用</option>
+              <option value="disabled">停用</option>
+            </select>
+            <select id="roleFilter" aria-label="按角色筛选">
+              <option value="all">全部角色</option>
+              <option value="admin">管理员</option>
+              <option value="user">普通用户</option>
+            </select>
+            <button class="btn btn--primary btn--small" id="newUserBtn" type="button">新建账户</button>
+          </div>
+        </div>
+
+        <div class="user-table" id="userTable">
+          <div class="user-table__head" aria-hidden="true">
+            <span>账户</span><span>邮箱</span><span>角色</span><span>状态</span><span>最近登录</span><span>操作</span>
+          </div>
+          <div id="userRows"></div>
+        </div>
+        <div class="admin-empty" id="userEmpty" hidden>
+          <strong>没有匹配的账户</strong>
+          <span>换一个关键词或筛选条件试试。</span>
+        </div>
+      </section>
+
+      <section class="admin-panel">
+        <div class="admin-panel__head">
+          <div>
+            <p class="panel__kicker">CHANGELOG</p>
+            <h2>更新日志</h2>
+          </div>
+          <button class="btn btn--ghost btn--small" id="newChangeBtn" type="button">新增日志</button>
+        </div>
+        <div class="admin-changelog" id="adminChangelog"></div>
+      </section>
+    </div>
+  </main>
+
+  <dialog class="admin-dialog" id="userDialog" aria-labelledby="userDialogTitle">
+    <form id="userForm" method="dialog" novalidate>
+      <div class="admin-dialog__head">
+        <div><p class="panel__kicker" id="userDialogKicker">NEW ACCOUNT</p><h2 id="userDialogTitle">新建账户</h2></div>
+        <button class="admin-dialog__close" type="button" data-close-dialog aria-label="关闭">×</button>
+      </div>
+      <div class="admin-form-grid">
+        <label class="admin-field"><span>用户名</span><input id="dialogUsername" name="username" type="text" maxlength="20" autocomplete="off" required></label>
+        <label class="admin-field" id="dialogEmailField"><span>邮箱</span><input id="dialogEmail" name="email" type="email" autocomplete="off"></label>
+        <label class="admin-field" id="dialogPasswordField"><span>初始密码</span><input id="dialogPassword" name="password" type="password" autocomplete="new-password" placeholder="至少 8 位"></label>
+        <label class="admin-field"><span>角色</span><select id="dialogRole" name="role"><option value="user">普通用户</option><option value="admin">管理员</option></select></label>
+        <label class="admin-field" id="dialogStatusField" hidden><span>状态</span><select id="dialogStatus" name="status"><option value="active">启用</option><option value="disabled">停用</option></select></label>
+      </div>
+      <p class="admin-dialog__msg" id="userDialogMsg" role="status" aria-live="polite"></p>
+      <div class="admin-dialog__actions">
+        <button class="btn btn--ghost" type="button" data-close-dialog>取消</button>
+        <button class="btn btn--primary" id="userDialogSubmit" type="submit">保存账户</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="admin-dialog" id="changeDialog" aria-labelledby="changeDialogTitle">
+    <form id="changeForm" method="dialog" novalidate>
+      <div class="admin-dialog__head">
+        <div><p class="panel__kicker">NEW ENTRY</p><h2 id="changeDialogTitle">新增更新日志</h2></div>
+        <button class="admin-dialog__close" type="button" data-close-dialog aria-label="关闭">×</button>
+      </div>
+      <div class="admin-form-grid admin-form-grid--two">
+        <label class="admin-field"><span>日期</span><input id="changeDate" type="date" required></label>
+        <label class="admin-field"><span>版本</span><input id="changeVersion" type="text" placeholder="例如 2.2" maxlength="20"></label>
+        <label class="admin-field admin-field--wide"><span>标题</span><input id="changeTitle" type="text" placeholder="这次更新做了什么" maxlength="100" required></label>
+        <label class="admin-field admin-field--wide"><span>类型</span><select id="changeType"><option value="feature">新功能</option><option value="design">设计 / 交互</option><option value="fix">修复</option><option value="release">版本发布</option><option value="update">一般更新</option></select></label>
+        <label class="admin-field admin-field--wide"><span>更新内容（每行一条）</span><textarea id="changeItems" rows="4" placeholder="新增了…&#10;优化了…"></textarea></label>
+      </div>
+      <p class="admin-dialog__msg" id="changeDialogMsg" role="status" aria-live="polite"></p>
+      <div class="admin-dialog__actions">
+        <button class="btn btn--ghost" type="button" data-close-dialog>取消</button>
+        <button class="btn btn--primary" id="changeDialogSubmit" type="submit">发布日志</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="admin-toast" id="adminToast" role="status" aria-live="polite"></div>
+
+  <script src="admin.js" defer></script>
+</body>
+</html>

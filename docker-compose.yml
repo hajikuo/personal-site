@@ -1,0 +1,17 @@
+services:
+  site:
+    build: .
+    container_name: lvyuanjin-site
+    restart: unless-stopped
+    ports:
+      - "4173:4173"
+    environment:
+      HOST: 0.0.0.0
+      PORT: 4173
+      DATA_DIR: /data
+      ALLOW_REGISTRATION: "false"
+    volumes:
+      - site-data:/data
+
+volumes:
+  site-data:

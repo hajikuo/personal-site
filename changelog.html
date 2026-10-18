@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>更新日志 · 吕芫瑨</title>
+  <meta name="description" content="吕芫瑨个人网站的版本更新与变化记录。">
+  <meta name="theme-color" content="#f3efe5" id="themeColor">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23171815'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='%23f3efe5' font-family='sans-serif'%3E吕%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("theme");
+        var dark = saved === "dark" || (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+      } catch (error) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#changelogMain">跳到更新日志</a>
+  <header class="site-header is-scrolled" id="siteHeader">
+    <div class="nav shell">
+      <a class="brand" href="index.html" aria-label="吕芫瑨，返回首页">
+        <span class="brand__mark" aria-hidden="true">吕</span>
+        <span class="brand__text"><strong>吕芫瑨</strong><small>PERSONAL SITE</small></span>
+      </a>
+      <div class="nav__actions">
+        <a class="nav__login" href="index.html">返回首页</a>
+        <button class="icon-btn theme-toggle" id="changelogTheme" type="button" aria-label="切换到深色模式" aria-pressed="false">
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20.5 14.4A8.5 8.5 0 1 1 9.6 3.5a7 7 0 0 0 10.9 10.9Z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="changelogMain">
+    <section class="changelog-hero shell">
+      <p class="section-kicker">CHANGELOG / SINCE 2026</p>
+      <h1>更新日志<span class="title-dot">.</span></h1>
+      <p>
+        这里记录网站的每一次版本变化：新功能、视觉调整、交互优化，
+        以及那些看起来很小但会让使用更顺手的细节。
+      </p>
+    </section>
+
+    <section class="section shell changelog-page">
+      <div class="changelog-list" id="changelogFull">
+        <article class="change-item">
+          <div class="change-item__meta"><span class="change-version">v2.1</span><time datetime="2026-10-18">2026-10-18</time><span class="change-type">功能</span></div>
+          <div class="change-item__body">
+            <h3>账户系统与更新日志上线</h3>
+            <ul>
+              <li>新增用户名注册与密码登录</li>
+              <li>新增管理后台：用户搜索、角色与状态管理</li>
+              <li>新增网站更新日志</li>
+              <li>登录页支持登录 / 注册切换</li>
+            </ul>
+          </div>
+        </article>
+        <article class="change-item">
+          <div class="change-item__meta"><span class="change-version">v2.0</span><time datetime="2026-10-18">2026-10-18</time><span class="change-type">设计</span></div>
+          <div class="change-item__body">
+            <h3>首页与工作台重构</h3>
+            <ul>
+              <li>重做首页视觉、导航与响应式布局</li>
+              <li>新增项目筛选、项目详情弹窗与笔记阅读</li>
+              <li>完善待办筛选、打卡连续天数与撤销操作</li>
+            </ul>
+          </div>
+        </article>
+        <article class="change-item">
+          <div class="change-item__meta"><span class="change-version">v1.1</span><time datetime="2026-10-14">2026-10-14</time><span class="change-type">功能</span></div>
+          <div class="change-item__body">
+            <h3>工作台与邮箱登录</h3>
+            <ul>
+              <li>加入待办、打卡、数据概览与时间线</li>
+              <li>接入邮箱验证码登录</li>
+            </ul>
+          </div>
+        </article>
+        <article class="change-item">
+          <div class="change-item__meta"><span class="change-version">v1.0</span><time datetime="2026-10-10">2026-10-10</time><span class="change-type">上线</span></div>
+          <div class="change-item__body">
+            <h3>个人网站上线</h3>
+            <ul>
+              <li>关于、作品、笔记与联系方式四个基础区块</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+
+      <a class="changelog-page__back" href="index.html">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"></path></svg>
+        返回首页
+      </a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner shell">
+      <div class="footer__brand">
+        <a class="brand" href="index.html">
+          <span class="brand__mark" aria-hidden="true">吕</span>
+          <span class="brand__text"><strong>吕芫瑨</strong><small>PERSONAL SITE</small></span>
+        </a>
+        <p>用代码、模型与一点好奇心，持续做点东西。</p>
+      </div>
+      <nav class="footer__links" aria-label="页脚导航">
+        <a href="index.html#about">关于</a>
+        <a href="index.html#work">项目</a>
+        <a href="index.html#blog">笔记</a>
+        <a href="index.html#workbench">工作台</a>
+        <a href="admin.html">管理后台</a>
+      </nav>
+      <div class="footer__meta">
+        <p>© <span id="year">2026</span> 吕芫瑨</p>
+        <p>Built with HTML / CSS / JavaScript</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="changelog.js" defer></script>
+</body>
+</html>

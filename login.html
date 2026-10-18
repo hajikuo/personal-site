@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录 / 注册 · 吕芫瑨</title>
+  <meta name="description" content="使用用户名和密码，或邮箱验证码登录吕芫瑨的个人网站。">
+  <meta name="theme-color" content="#f3efe5" id="themeColor">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23171815'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='%23f3efe5' font-family='sans-serif'%3E吕%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="login.css">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("theme");
+        var dark = saved === "dark" || (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+      } catch (error) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
+</head>
+<body class="auth-body">
+  <a class="skip-link" href="#authMain">跳到账户表单</a>
+  <div class="auth-page">
+    <div class="auth-backdrop" aria-hidden="true"></div>
+
+    <header class="auth-top">
+      <a class="brand" href="index.html" aria-label="吕芫瑨，返回首页">
+        <span class="brand__mark" aria-hidden="true">吕</span>
+        <span class="brand__text"><strong>吕芫瑨</strong><small>PERSONAL SITE</small></span>
+      </a>
+      <div class="auth-top__actions">
+        <button class="icon-btn theme-toggle" id="loginTheme" type="button" aria-label="切换到深色模式" aria-pressed="false">
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20.5 14.4A8.5 8.5 0 1 1 9.6 3.5a7 7 0 0 0 10.9 10.9Z"></path>
+          </svg>
+        </button>
+        <a class="auth-back" href="index.html">
+          返回首页
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"></path></svg>
+        </a>
+      </div>
+    </header>
+
+    <main class="auth-layout" id="authMain">
+      <section class="auth-intro" aria-labelledby="authIntroTitle">
+        <p class="eyebrow">
+          <span class="status-dot" aria-hidden="true"></span>
+          MEMBER ACCESS
+        </p>
+        <h1 id="authIntroTitle">留个名字，<br><em>再进来看看</em>。</h1>
+        <p class="auth-intro__lede">
+          创建一个用户名，用密码或邮箱验证码登录。账户系统会记住你的身份，
+          也让这个网站更像一个可以持续经营的小空间。
+        </p>
+
+        <ol class="auth-points">
+          <li>
+            <span>01</span>
+            <div><strong>创建账户</strong><p>用户名 + 邮箱，设置一个密码。</p></div>
+          </li>
+          <li>
+            <span>02</span>
+            <div><strong>登录网站</strong><p>支持用户名 / 邮箱登录与云端验证码。</p></div>
+          </li>
+          <li>
+            <span>03</span>
+            <div><strong>管理账户</strong><p>管理员可以在后台查看和管理账户。</p></div>
+          </li>
+        </ol>
+
+        <div class="auth-orbit" aria-hidden="true">
+          <span class="auth-orbit__ring"></span>
+          <span class="auth-orbit__ring auth-orbit__ring--two"></span>
+          <span class="auth-orbit__dot"></span>
+          <span class="auth-orbit__label">SIGN IN · SIGN UP · MANAGE</span>
+        </div>
+      </section>
+
+      <section class="auth-card" aria-labelledby="authTitle">
+        <div class="auth-card__head">
+          <span class="mono-label">ACCOUNT</span>
+          <span class="auth-status"><span class="status-dot" aria-hidden="true"></span><span id="authModeText">检测中</span></span>
+        </div>
+
+        <h2 id="authTitle">登录或创建账户</h2>
+        <p class="auth-sub" id="authSub">正在检测可用的登录方式…</p>
+
+        <div class="auth-tabs" role="tablist" aria-label="登录与注册">
+          <button class="is-active" id="tabLogin" type="button" role="tab" aria-selected="true" aria-controls="panelLogin" data-auth-tab="login">登录</button>
+          <button id="tabRegister" type="button" role="tab" aria-selected="false" aria-controls="panelRegister" data-auth-tab="register">注册</button>
+        </div>
+
+        <p class="auth-mode-note auth-mode-note--error" id="authUnavailable" hidden>
+          登录服务未连接。请通过本地账户服务器打开网站，或部署到已配置云端验证的域名。
+        </p>
+
+        <div class="auth-panel" id="panelLogin" role="tabpanel" aria-labelledby="tabLogin">
+          <div class="auth-mode-local" hidden>
+            <form id="localLoginForm" class="auth-form" novalidate>
+              <div class="field">
+                <label class="field__label" for="loginIdentifier">用户名或邮箱</label>
+                <input id="loginIdentifier" name="identifier" type="text" placeholder="例如：yuanjin" autocomplete="username" aria-describedby="loginIdentifierHint">
+                <span class="field__hint" id="loginIdentifierHint">使用注册时的用户名或邮箱</span>
+              </div>
+              <div class="field">
+                <label class="field__label" for="loginPassword">密码</label>
+                <input id="loginPassword" name="password" type="password" placeholder="输入密码" autocomplete="current-password">
+              </div>
+              <button type="submit" id="localLoginSubmit" class="btn btn--primary auth-submit">
+                <span class="auth-submit__label">登录</span>
+                <span class="auth-spinner" aria-hidden="true"></span>
+              </button>
+              <p id="localLoginMsg" class="auth-msg" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+
+          <div class="auth-mode-cloud" hidden>
+            <p class="auth-mode-note">当前为云端验证码模式：输入邮箱获取验证码即可登录。</p>
+            <form id="cloudLoginForm" class="auth-form" novalidate>
+              <div class="field">
+                <label class="field__label" for="cloudEmail">邮箱</label>
+                <input id="cloudEmail" name="email" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email">
+              </div>
+              <div class="field">
+                <label class="field__label" for="cloudCode">验证码</label>
+                <div class="field-row">
+                  <input id="cloudCode" name="code" type="text" inputmode="numeric" maxlength="6" placeholder="6 位数字" autocomplete="one-time-code">
+                  <button type="button" id="cloudSendBtn" class="btn btn--ghost auth-send">获取验证码</button>
+                </div>
+                <span class="field__hint">6 位数字，短时间内有效</span>
+              </div>
+              <button type="submit" id="cloudLoginSubmit" class="btn btn--primary auth-submit">
+                <span class="auth-submit__label">登录</span>
+                <span class="auth-spinner" aria-hidden="true"></span>
+              </button>
+              <p id="cloudLoginMsg" class="auth-msg" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+        </div>
+
+        <div class="auth-panel" id="panelRegister" role="tabpanel" aria-labelledby="tabRegister" hidden>
+          <div class="auth-mode-local" hidden>
+            <form id="localRegisterForm" class="auth-form" novalidate>
+              <div class="field">
+                <label class="field__label" for="registerUsername">用户名</label>
+                <input id="registerUsername" name="username" type="text" placeholder="2–20 位，例如 yuanjin" autocomplete="username" maxlength="20" aria-describedby="registerUsernameHint">
+                <span class="field__hint" id="registerUsernameHint">支持中文、字母、数字、下划线与短横线</span>
+              </div>
+              <div class="field">
+                <label class="field__label" for="registerEmail">邮箱</label>
+                <input id="registerEmail" name="email" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email">
+              </div>
+              <div class="field">
+                <label class="field__label" for="registerPassword">密码</label>
+                <input id="registerPassword" name="password" type="password" placeholder="至少 8 位" autocomplete="new-password">
+              </div>
+              <div class="field">
+                <label class="field__label" for="registerConfirm">确认密码</label>
+                <input id="registerConfirm" name="confirm" type="password" placeholder="再输入一次" autocomplete="new-password">
+              </div>
+              <button type="submit" id="localRegisterSubmit" class="btn btn--primary auth-submit">
+                <span class="auth-submit__label">创建账户</span>
+                <span class="auth-spinner" aria-hidden="true"></span>
+              </button>
+              <p id="localRegisterMsg" class="auth-msg" role="status" aria-live="polite"></p>
+              <p class="auth-tip" id="registerRoleTip">首个注册账户会自动成为站点管理员。</p>
+            </form>
+          </div>
+
+          <div class="auth-mode-cloud" hidden>
+            <p class="auth-mode-note">云端模式使用邮箱验证码注册；用户名会保存在当前浏览器中。</p>
+            <form id="cloudRegisterForm" class="auth-form" novalidate>
+              <div class="field">
+                <label class="field__label" for="cloudRegUsername">用户名</label>
+                <input id="cloudRegUsername" name="username" type="text" placeholder="设置一个用户名" autocomplete="nickname" maxlength="20">
+              </div>
+              <div class="field">
+                <label class="field__label" for="cloudRegEmail">邮箱</label>
+                <input id="cloudRegEmail" name="email" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email">
+              </div>
+              <div class="field">
+                <label class="field__label" for="cloudRegCode">验证码</label>
+                <div class="field-row">
+                  <input id="cloudRegCode" name="code" type="text" inputmode="numeric" maxlength="6" placeholder="6 位数字" autocomplete="one-time-code">
+                  <button type="button" id="cloudRegSendBtn" class="btn btn--ghost auth-send">获取验证码</button>
+                </div>
+                <span class="field__hint">6 位数字，短时间内有效</span>
+              </div>
+              <button type="submit" id="cloudRegSubmit" class="btn btn--primary auth-submit">
+                <span class="auth-submit__label">注册并登录</span>
+                <span class="auth-spinner" aria-hidden="true"></span>
+              </button>
+              <p id="cloudRegMsg" class="auth-msg" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+        </div>
+
+        <div class="auth-card__footer">
+          <p>账户信息仅用于登录与站点管理。</p>
+          <a href="admin.html">管理后台</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="auth-footer">
+      <p>© <span id="year">2026</span> 吕芫瑨</p>
+      <p>Built with HTML / CSS / JavaScript</p>
+    </footer>
+  </div>
+
+  <script src="workbuddy-sdk.js" defer></script>
+  <script src="cloud-config.js" defer></script>
+  <script src="login.js" defer></script>
+</body>
+</html>
